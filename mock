@@ -1,0 +1,115 @@
+import re
+import bcrypt
+
+class MockDatabase:
+    def __init__(self):
+        self.data = []  # To store Aadhaar records
+        self.users = []  # To store user credentials
+
+    def add_aadhaar(self, name, aadhaar_number, date_of_birth, address):
+        record = {
+            'id': len(self.data) + 1,
+            'name': name,
+            'aadhaar_number': aadhaar_number,
+            'date_of_birth': date_of_birth,
+            'address': address
+        }
+        self.data.append(record)
+        return record
+
+    def get_aadhaar(self, aadhaar_number):
+        for record in self.data:
+            if record['aadhaar_number'] == aadhaar_number:
+                return record
+        return None
+
+    def update_aadhaar(self, aadhaar_number, updated_info):
+        for record in self.data:
+            if record['aadhaar_number'] == aadhaar_number:
+                record.update(updated_info)
+                return record
+        return None
+
+    def list_aadhaars(self):
+        return self.data
+
+    def register_user(self, username, password, aadhaar_number):
+        # Hash the password
+        hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
+        user_record = {
+            'username': username,
+            'password': hashed_password,
+            'aadhaar_number': aadhaar_number
+        }
+        self.users.append(user_record)
+        return user_record
+
+    def verify_user(self, username, password):
+        for user in self.users:
+            if user['username'] == username and bcrypt.checkpw(password.encode('utf-8'), user['password']):
+                return True
+        return False
+
+
+def main():
+    db = MockDatabase()
+    logged_in_user = None  # To keep track of the logged-in user
+
+    while True:
+        print("\nAadhaar Card Management System")
+        if logged_in_user:
+            print(f"Logged in as: {logged_in_user['username']}")
+            print("1. Add Aadhaar Details")
+            print("2. View Aadhaar Details")
+            print("3. Update Aadhaar Details")
+            print("4. List All Aadhaar Records")
+            print("5. Logout")
+        else:
+            print("1. Register User")
+            print("2. User Login")
+            print("3. Exit")
+
+        choice = input("Enter your choice: ")
+
+        if choice == '1' and not logged_in_user:  # Register User
+            username = input("Enter Username: ")
+            password = input("Enter Password: ")
+            aadhaar_number = input("Enter Aadhaar Number: ")
+            db.register_user(username, password, aadhaar_number)
+            print("User registered successfully!")
+
+        elif choice == '2' and not logged_in_user:  # User Login
+            username = input("Enter Username: ")
+            password = input("Enter Password: ")
+            if db.verify_user(username, password):
+                print("Login successful!")
+                # Find the logged-in user record
+                logged_in_user = next(user for user in db.users if user['username'] == username)
+            else:
+                print("Invalid username or password.")
+
+        elif choice == '1' and logged_in_user:  # Add Aadhaar Details
+            name = input("Enter Name: ")
+            aadhaar_number = input("Enter Aadhaar Number: ")
+            date_of_birth = input("Enter Date of Birth (YYYY-MM-DD): ")
+            address = input("Enter Address: ")
+            db.add_aadhaar(name, aadhaar_number, date_of_birth, address)
+            print("Aadhaar details added successfully!")
+
+        elif choice == '2' and logged_in_user:  # View Aadhaar Details
+            aadhaar_number = input("Enter Aadhaar Number to view: ")
+            record = db.get_aadhaar(aadhaar_number)
+            if record:
+                print("Aadhaar Details:", record)
+            else:
+                print("No record found for the given Aadhaar number.")
+
+        elif choice == '3' and logged_in_user:  # Update Aadhaar Details
+            aadhaar_number = input("Enter Aadhaar Number to update: ")
+            updated_info = {}
+            name = input("Enter new Name (leave blank to skip): ")
+            if name:
+                updated_info['name'] = name
+            address = input("Enter new Address (leave blank to skip): ")
+            if address:
+               

@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ration Shop Management System</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      margin: 0;
+      padding: 0;
+    }
+    nav {
+      background-color: #333;
+      padding: 10px;
+    }
+    nav ul {
+      list-style-type: none;
+      padding: 0;
+    }
+    nav ul li {
+      display: inline;
+      margin-right: 20px;
+    }
+    nav ul li a {
+      color: white;
+      text-decoration: none;
+    }
+    .container {
+      padding: 20px;
+    }
+    .page-content {
+      display: none;
+    }
+    .active {
+      display: block;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav>
+    <ul>
+      <li><a href="#" onclick="showPage('home')">Home</a></li>
+      <li><a href="#" onclick="showPage('login')">Login</a></li>
+      <li><a href="#" onclick="showPage('customer')">Customer Dashboard</a></li>
+      <li><a href="#" onclick="showPage('shopkeeper')">Shopkeeper Dashboard</a></li>
+      <li><a href="#" onclick="showPage('admin')">Admin Dashboard</a></li>
+    </ul>
+  </nav>
+
+  <!-- Main Container to hold pages -->
+  <div class="container">
+    <div id="home" class="page-content active">
+      <h1>Welcome to the Home Page</h1>
+      <p>This is the landing page of the Ration Shop Management System.</p>
+    </div>
+
+    <div id="login" class="page-content">
+      <h1>Login</h1>
+      <form id="loginForm">
+        <label for="rationNumber">Ration Number:</label>
+        <input type="text" id="rationNumber" name="rationNumber" required><br><br>
+
+        <label for="dob">Date of Birth:</label>
+        <input type="date" id="dob" name="dob" required><br><br>
+
+        <button type="submit">Login</button>
+      </form>
+    </div>
+
+    <div id="customer" class="page-content">
+      <h1>Customer Dashboard</h1>
+      <p>Welcome, customer! Here, you can view ration details and make requests.</p>
+    </div>
+
+    <div id="shopkeeper" class="page-content">
+      <h1>Shopkeeper Dashboard</h1>
+      <p>Welcome, shopkeeper! Here, you can manage ration distribution and customer data.</p>
+    </div>
+
+    <div id="admin" class="page-content">
+      <h1>Admin Dashboard</h1>
+      <p>Welcome, admin! Here, you can manage all ration shop operations and users.</p>
+    </div>
+  </div>
+
+  <script>
+    // JavaScript function to simulate routing
+    function showPage(page) {
+      // Hide all pages
+      const pages = document.querySelectorAll('.page-content');
+      pages.forEach(page => page.classList.remove('active'));
+
+      // Show the selected page
+      const selectedPage = document.getElementById(page);
+      if (selectedPage) {
+        selectedPage.classList.add('active');
+      }
+    }
+
+    // Default page to show on load
+    showPage('home');
+  </script>
+
+</body>
+</html>
